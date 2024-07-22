@@ -9,4 +9,7 @@ export default defineConfig({
       }),
     ],
   },
+  deployment: {
+    preset: 'netlify',
+  },
 })
