@@ -16,6 +16,7 @@ import { Route as PostsImport } from './routes/posts'
 import { Route as DeferredImport } from './routes/deferred'
 import { Route as LayoutImport } from './routes/_layout'
 import { Route as IndexImport } from './routes/index'
+import { Route as SuspenseIndexImport } from './routes/suspense.index'
 import { Route as PostsIndexImport } from './routes/posts.index'
 import { Route as PostsPostIdImport } from './routes/posts.$postId'
 import { Route as LayoutLayout2Import } from './routes/_layout/_layout-2'
@@ -47,6 +48,11 @@ const LayoutRoute = LayoutImport.update({
 
 const IndexRoute = IndexImport.update({
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SuspenseIndexRoute = SuspenseIndexImport.update({
+  path: '/suspense/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -140,6 +146,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PostsIndexImport
       parentRoute: typeof PostsImport
     }
+    '/suspense/': {
+      id: '/suspense/'
+      path: '/suspense'
+      fullPath: '/suspense'
+      preLoaderRoute: typeof SuspenseIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/_layout/_layout-2/layout-a': {
       id: '/_layout/_layout-2/layout-a'
       path: '/layout-a'
@@ -211,6 +224,7 @@ export interface FileRoutesByFullPath {
   '/redirect': typeof RedirectRoute
   '/posts/$postId': typeof PostsPostIdRoute
   '/posts/': typeof PostsIndexRoute
+  '/suspense': typeof SuspenseIndexRoute
   '/layout-a': typeof LayoutLayout2LayoutARoute
   '/layout-b': typeof LayoutLayout2LayoutBRoute
   '/posts/$postId/deep': typeof PostsPostIdDeepRoute
@@ -223,6 +237,7 @@ export interface FileRoutesByTo {
   '/redirect': typeof RedirectRoute
   '/posts/$postId': typeof PostsPostIdRoute
   '/posts': typeof PostsIndexRoute
+  '/suspense': typeof SuspenseIndexRoute
   '/layout-a': typeof LayoutLayout2LayoutARoute
   '/layout-b': typeof LayoutLayout2LayoutBRoute
   '/posts/$postId/deep': typeof PostsPostIdDeepRoute
@@ -238,6 +253,7 @@ export interface FileRoutesById {
   '/_layout/_layout-2': typeof LayoutLayout2RouteWithChildren
   '/posts/$postId': typeof PostsPostIdRoute
   '/posts/': typeof PostsIndexRoute
+  '/suspense/': typeof SuspenseIndexRoute
   '/_layout/_layout-2/layout-a': typeof LayoutLayout2LayoutARoute
   '/_layout/_layout-2/layout-b': typeof LayoutLayout2LayoutBRoute
   '/posts/$postId/deep': typeof PostsPostIdDeepRoute
@@ -253,6 +269,7 @@ export interface FileRouteTypes {
     | '/redirect'
     | '/posts/$postId'
     | '/posts/'
+    | '/suspense'
     | '/layout-a'
     | '/layout-b'
     | '/posts/$postId/deep'
@@ -264,6 +281,7 @@ export interface FileRouteTypes {
     | '/redirect'
     | '/posts/$postId'
     | '/posts'
+    | '/suspense'
     | '/layout-a'
     | '/layout-b'
     | '/posts/$postId/deep'
@@ -277,6 +295,7 @@ export interface FileRouteTypes {
     | '/_layout/_layout-2'
     | '/posts/$postId'
     | '/posts/'
+    | '/suspense/'
     | '/_layout/_layout-2/layout-a'
     | '/_layout/_layout-2/layout-b'
     | '/posts/$postId/deep'
@@ -289,6 +308,7 @@ export interface RootRouteChildren {
   DeferredRoute: typeof DeferredRoute
   PostsRoute: typeof PostsRouteWithChildren
   RedirectRoute: typeof RedirectRoute
+  SuspenseIndexRoute: typeof SuspenseIndexRoute
   PostsPostIdDeepRoute: typeof PostsPostIdDeepRoute
 }
 
@@ -298,6 +318,7 @@ const rootRouteChildren: RootRouteChildren = {
   DeferredRoute: DeferredRoute,
   PostsRoute: PostsRouteWithChildren,
   RedirectRoute: RedirectRoute,
+  SuspenseIndexRoute: SuspenseIndexRoute,
   PostsPostIdDeepRoute: PostsPostIdDeepRoute,
 }
 
@@ -318,6 +339,7 @@ export const routeTree = rootRoute
         "/deferred",
         "/posts",
         "/redirect",
+        "/suspense/",
         "/posts/$postId/deep"
       ]
     },
@@ -358,6 +380,9 @@ export const routeTree = rootRoute
     "/posts/": {
       "filePath": "posts.index.tsx",
       "parent": "/posts"
+    },
+    "/suspense/": {
+      "filePath": "suspense.index.tsx"
     },
     "/_layout/_layout-2/layout-a": {
       "filePath": "_layout/_layout-2/layout-a.tsx",
