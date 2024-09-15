@@ -18,6 +18,7 @@ app.get('/', function (req, res) {
 })
 
 app.get('/epics', function (req, res) {
+  console.log({ cookies: req.cookies })
   console.log('Loading epics ...')
   new Promise((res) => setTimeout(res, 1000)).then(() => {
     query('SELECT * FROM epics').then((epics) => {

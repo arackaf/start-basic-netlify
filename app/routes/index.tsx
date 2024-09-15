@@ -1,9 +1,27 @@
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import { getServerTime } from '~/getServerTime'
 
 export const Route = createFileRoute('/')({
   component: Home,
   async loader({ context }) {
+    try {
+      const x = await getServerTime()
+      console.log('Server Function Result', { x })
+    } catch (er) {
+      console.log('server function call failed', { er })
+    }
+    try {
+      console.log('Calling')
+      await fetch('http://localhost:3000/api/foo')
+        .then((resp) => resp.text())
+        .then((json) => {
+          console.log({ json })
+        })
+    } catch (err) {
+      console.log('error calling api', { err })
+    }
+
     await context.queryClient.ensureQueryData({
       queryKey: ['epics'],
       queryFn: async () => {
@@ -18,11 +36,10 @@ export const Route = createFileRoute('/')({
     })
 
     const val = +new Date()
-    console.log('\n\n')
+
     console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
     console.log('Server loader', val)
     console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-    console.log('\n\n')
 
     return {
       a: val,
